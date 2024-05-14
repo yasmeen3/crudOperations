@@ -1,5 +1,6 @@
 package com.springdata.first.model.entity;
 
+import com.springdata.first.model.dto.EmployeeDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,5 +35,15 @@ public class Employee {
 	
 	@Column(name="salary")
 	private Double salary;
+
+
+	public static Employee toEntity(EmployeeDto employeeDto)
+	{
+		return Employee.builder().
+				id(employeeDto.getId()).
+				firstName(employeeDto.getFirstName()).
+				lastName(employeeDto.getLastName()).
+				salary(employeeDto.getSalary()).build();
+	}
 
 }

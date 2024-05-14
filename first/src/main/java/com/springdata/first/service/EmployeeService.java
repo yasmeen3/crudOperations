@@ -1,37 +1,46 @@
 package com.springdata.first.service;
 
-import javax.print.attribute.standard.MediaSize.Other;
-
-import org.apache.el.stream.Optional;
+import com.springdata.first.model.dto.EmployeeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springdata.first.model.entity.Employee;
 import com.springdata.first.repository.EmpRepo;
 
+import java.util.List;
+
 @Service
 public class EmployeeService {
 	@Autowired
 private EmpRepo empRepo;
 	
-	public Employee getUser(Integer id)
+	public EmployeeDto getUser(Integer id)
 	{
 		
-		java.util.Optional<Employee> emp = this.empRepo.findById(id);
-		
-			return emp.orElse(new Employee());
+		java.util.Optional<Employee> emp = empRepo.findById(id);
+		return emp.map(EmployeeDto::toDto).orElse(null);
+//		if(emp.isPresent())
+//			return EmployeeDto.toDto(emp.get());
+//		else
+//			return null;
 	}
 	
-	public Employee save  (Employee emp) {
-		Employee savedEmp = this.empRepo.save(emp);
-		return savedEmp;
+	public EmployeeDto save  (EmployeeDto emp) {
+		return  EmployeeDto.toDto(empRepo.save(Employee.toEntity(emp)));
+
 		
 	}
 	
 	public void deleteEmployee(Integer id)
 	{
 		
-		 this.empRepo.deleteById(id);
+		 empRepo.deleteById(id);
 		
 	}
+
+	public List<Employee> findAllEmployees()
+	{
+		return empRepo.findAll();
+	}
 }
+
